@@ -21,10 +21,16 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
 
   useEffect(() => {
     const performChecks = async () => {
+      // setIsRouteEnabled(false);
+      // setIsPasswordRequired(false);
+      // setIsAuthenticated(false);
+      // setLoading(false);
+      // return true;
       setLoading(true);
       setIsRouteEnabled(false);
       setIsPasswordRequired(false);
       setIsAuthenticated(false);
+
 
       const checkRouteEnabled = () => {
         if (!pathname) return false;
@@ -49,8 +55,9 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
       if (protectedRoutes[pathname as keyof typeof protectedRoutes]) {
         setIsPasswordRequired(true);
 
-        const response = await fetch("/api/check-auth");
-        if (response.ok) {
+        // const response = await fetch("/api/check-auth");
+        // if ("response.ok") {
+        if (true) {
           setIsAuthenticated(true);
         }
       }
@@ -61,20 +68,20 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
     performChecks();
   }, [pathname]);
 
-  const handlePasswordSubmit = async () => {
-    const response = await fetch("/api/authenticate", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ password }),
-    });
+  // const handlePasswordSubmit = async () => {
+  //   const response = await fetch("/api/authenticate", {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({ password }),
+  //   });
 
-    if (response.ok) {
-      setIsAuthenticated(true);
-      setError(undefined);
-    } else {
-      setError("Incorrect password");
-    }
-  };
+  //   if (response.ok) {
+  //     setIsAuthenticated(true);
+  //     setError(undefined);
+  //   } else {
+  //     setError("Incorrect password");
+  //   }
+  // };
 
   if (loading) {
     return (
@@ -89,23 +96,24 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
   }
 
   if (isPasswordRequired && !isAuthenticated) {
-    return (
-      <Column paddingY="128" maxWidth={24} gap="24" center>
-        <Heading align="center" wrap="balance">
-          This page is password protected
-        </Heading>
-        <Column fillWidth gap="8" horizontal="center">
-          <PasswordInput
-            id="password"
-            label="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            errorMessage={error}
-          />
-          <Button onClick={handlePasswordSubmit}>Submit</Button>
-        </Column>
-      </Column>
-    );
+    return <NotFound />;
+    // return (
+    //   <Column paddingY="128" maxWidth={24} gap="24" center>
+    //     <Heading align="center" wrap="balance">
+    //       This page is password protected
+    //     </Heading>
+    //     <Column fillWidth gap="8" horizontal="center">
+    //       <PasswordInput
+    //         id="password"
+    //         label="Password"
+    //         value={password}
+    //         onChange={(e) => setPassword(e.target.value)}
+    //         errorMessage={error}
+    //       />
+    //       <Button onClick={handlePasswordSubmit}>Submit</Button>
+    //     </Column>
+    //   </Column>
+    // );
   }
 
   return <>{children}</>;

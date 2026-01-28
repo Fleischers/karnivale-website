@@ -15,6 +15,7 @@ const nextConfig = {
   pageExtensions: ["ts", "tsx", "md", "mdx"],
   transpilePackages: ["next-mdx-remote"],
   images: {
+    // unoptimized: true,
     remotePatterns: [
       {
         protocol: "https",
